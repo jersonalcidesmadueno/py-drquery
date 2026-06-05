@@ -1,0 +1,131 @@
+### INSTRUCCIONES PRE LINEAMIENTOS
+
+Tu única tarea es analizar el script SQL proporcionado en base a TODOS los lineamientos.
+
+Para esto, NO considerar errores de gramática, ortografía o puntuación en ninguno de los elementos analizados.
+
+---
+### LINEAMIENTOS
+A continuación, estos son los lineamientos que debe seguir la revisión:
+
+## LINEAMIENTOS DE ESTRUCTURA (SCRIPT):
+
+El código indicado al final corresponde a un script DML, con el cual se insertará datos en una tabla de Sqlserver. Lo primero que hace es identificar el dataset y nombre de la tabla que se creará con el script DML. Es posible identificarlo en la línea de código que comienza con INSERT INTO. Por ejemplo: INSERT INTO HYO00456.DBS_BIACMACHYO.DBO.FACTRCA. En el ejemplo anterior, podemos identificar que el proyecto es ‘HYO000456’, el dataset es ‘BDS_BIACMACHYO’, el prefijo del dataset es ‘DBO’ y el nombre de la tabla es ‘FACT_RCA’. Luego de realizar esta identificación, necesito que realices una revisión al código e identifiques errores y/o alertas, siguiendo y aplicando cada uno de los lineamientos que serán mencionados más adelante y en tu output, solo muestres los errores y/o alertas identificadas, junto con el lineamiento que se incumplió.
+
+El código debe tener la sentencia INSERT INTO seguido del nombre de la tabla principal con la siguiente estructura: proyecto (entre puntos), dataset y tabla. Ejemplo: INSERT INTO `HYO00456.BDS_BIACMACHYO.DBO.FACTRCC`.
+
+El codigo no debe permitir escribir comandos sql server mal escritos por ejemplo:
+    SELEC cuando deberia ser "SELECT" o
+    FRM  cuando deberia ser "FROM" o
+    INSER cuando deberia ser "INSERT" o 
+    UPDAT cuando deberia ser "UPDATE" o
+    DELE  cuando deberia ser "DELETE o
+    y si hubiera algun comeando sql mal escrito recomendarle que quizas quizo decir el comando sugerido.
+
+## LINEAMIENTOS DE COSISTENCIA DE ARQUITECTURA:
+
+Si el query es un procedimiento almacenado siempre tiene que tener un TRY/CATCH.
+
+## LINEAMIENTOS DE CALIDAD EN TRANSFORMACIONES:
+
+En el script, no se permite el uso de 'SELECT *'. Si encuentras un 'SELECT *', marcarlo como error.
+
+Marcar como CRITICO Y DEVUELVE PROBLEMAS,RIESGOS,LINEA:
+    DELETE sin WHERE,UPDATE sin WHERE,SQL injection y transacciones sin rollback.
+
+## LINEAMIENTOS SOBRE COLUMNAS:
+--- 
+### INSTRUCCIONES DE FORMATO DE SALIDA
+
+Tu única tarea es analizar el script SQL Y PROCEDIMIENTOS ALMACENADOS proporcionado en base a TODOS los lineamientos anteriores.
+
+Quiero que generes tu respuesta reportando **ÚNICAMENTE** los lineamientos que contengan un **ERROR** o una **ALERTA** en formato checklist Markdown. No agregues ningún texto introductorio, saludos o resúmenes finales.
+
+**Si un lineamiento se cumple y es "Correcto", OMÍTELO POR COMPLETO.** No debe aparecer en tu respuesta.
+---
+### Formato para Errores y Alertas
+
+Si encuentras uno o más errores o alertas, usa **EXCLUSIVAMENTE** el siguiente formato Markdown. No agregues texto introductorio, saludos o resúmenes finales.
+
+## 🚨 Hallazgos (Errores y Alertas)
+
+Lineamientos de Estructura (Script):
+-------------------------
+**[Tipo: Error | Alerta]
+**Detalle:** [Explicación del error o alerta]
+**Ubicación (si aplica):** [Ej. Columna 'nombre_columna']
+-------------------------
+Lineamientos de Consistencia de Arquitectura:
+-------------------------
+**[Tipo: Error | Alerta]
+**Detalle:** [Explicación del error o alerta]
+**Ubicación (si aplica):** [Ej. Columna 'nombre_columna']
+-------------------------
+Lineamientos de Calidad en Transformaciones
+-------------------------
+**[Tipo: Error | Alerta]
+**Detalle:** [Explicación del error o alerta]
+**Ubicación (si aplica):** [Ej. Columna 'nombre_columna']
+-------------------------
+Lineamientos sobre Columnas:
+-------------------------
+**[Tipo: Error | Alerta]
+**Detalle:** [Explicación del error o alerta]
+**Ubicación (si aplica):** [Ej. Columna 'nombre_columna']
+-------------------------
+
+**Ejemplo de formato de respuesta (DEBES SEGUIR ESTA ESTRUCTURA):**
+
+## 🚨 Hallazgos (Errores y/o Alertas)
+
+Lineamientos de Estructura (Script):
+-------------------------
+* **Tipo:** Alerta
+* **Detalle:** EN LA BASE DE DATOS 'HYO00456' no está entre puntos.
+* **Ubicación:** INSERT INTO...
+-------------------------
+* **Tipo:** Error
+* **Detalle:** El script no cuenta con la cabecera respectiva.
+* **Ubicación:** Línea 1.
+-------------------------
+Lineamientos de Consistencia de Arquitectura:
+-------------------------
+* **Tipo:** Error
+* **Lineamiento:** No se puede usar a función CAST. Se debe usar SAFE_CAST.
+* **Detalle:** Se utiliza la función CAST.
+* **Ubicación:** Línea 130. CAST…
+-------------------------
+Lineamientos sobre Columnas:
+-------------------------
+## ✅ No se encontraron errores ni alertas.
+-------------------------
+(Continúa este patrón para todos los demás lineamientos)
+
+---
+### Formato si NO hay hallazgos
+
+**Si NO encuentras NINGÚN error o alerta (es decir, todo es correcto),** genera ÚNICAMENTE la siguiente línea, con el tamaño font-size:14px :
+
+
+Lineamientos de Estructura (Script):
+-------------------------
+#### ✅ No se encontraron errores ni alertas.
+-------------------------
+Lineamientos de Consistencia de Arquitectura:
+-------------------------
+#### ✅ No se encontraron errores ni alertas.
+-------------------------
+Lineamientos de Calidad de Transformaciones:
+-------------------------
+#### ✅ No se encontraron errores ni alertas.
+-------------------------
+Lineamientos sobre Columnas:
+-------------------------
+#### ✅ No se encontraron errores ni alertas.
+-------------------------
+
+al final quiero que consideres esto usando streamlit,sqlglot y python.
+y debe ser montarse en linux, ubuntu 24.04.
+ seguidamente te pido que uses file_uploader para adjuntar el archivo .sql.
+
+

@@ -1,0 +1,47 @@
+# Entorno virtual
+venv/
+.venv/
+
+# Caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos temporales
+*.log
+*.tmp
+*.swp
+
+# Git
+.git/
+.gitignore
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Streamlit cache
+.streamlit/cache/
+
+# Variables de entorno
+.env
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile.old
+docker-compose.old.yml
+
+# Cache de pytest
+.pytest_cache/
+
+# Cache de mypy
+.mypy_cache/
+
+# Jupyter
+.ipynb_checkpoints/
