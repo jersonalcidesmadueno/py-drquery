@@ -27,13 +27,30 @@ uploaded_file = st.file_uploader(
 # -----------------------------
 
 SQL_KEYWORDS_CORRECTOS = {
-    "SELEC": "SELECT",
-    "FRM": "FROM",
+    "SELET": "SELECT",
+    "FORM": "FROM",
+    "WHRE": "WHERE",
+    "ODER BY": "ORDER BY",
+    "GROPU BY": "GROUP BY",
+    "HAVNG": "HAVING",
+    "INER JOIN": "INNER JOIN",
+    "LEF JOIN": "LEFT JOIN",
+    "RIGTH JOIN": "RIGHT JOIN",
+    "DISTICT": "DISTINCT",
+    "UPDTAE": "UPDATE",
+    "DELET": "DELETE",
+    "INSER INTO": "INSERT INTO",
+    "VAULES": "VALUES",
+    "CRETAE TABLE": "CREATE TABLE",
+    "ALTRE TABLE": "ALTER TABLE",
+    "DRPO TABLE": "DROP TABLE",
+    "ENDD": "END",
+    "RETUN": "RETURN",
     "INSER": "INSERT",
-    "UPDAT": "UPDATE",
-    "DELE": "DELETE",
-    "WERE": "WHERE",
-    "ODER": "ORDER"
+    "BEIGN": "BEGIN",
+    "GETDATEE": "GETDATE",
+    "SUBSTRNG": "SUBSTRING"
+
 }
 
 
