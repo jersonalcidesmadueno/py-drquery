@@ -72,9 +72,9 @@ def agregar_hallazgo(lista, categoria, tipo, detalle, ubicacion):
 
 def validar_estructura(script, hallazgos):
     # Validar INSERT INTO estructura
-    patron = r"INSERT\s+INTO\s+([A-Za-z0-9_]+\.[A-Za-z0-9_]+\.[A-Za-z0-9_]+\.[A-Za-z0-9_]+)"
+    #patron = r"INSERT\s+INTO\s+([A-Za-z0-9_]+\.[A-Za-z0-9_]+\.[A-Za-z0-9_]+\.[A-Za-z0-9_]+)"
 
-    match = re.search(patron, script, re.IGNORECASE)
+    #match = re.search(patron, script, re.IGNORECASE)
 
     #if not match:
     #    agregar_hallazgo(
@@ -88,13 +88,13 @@ def validar_estructura(script, hallazgos):
     # Validar comandos mal escritos
     for incorrecto, correcto in SQL_KEYWORDS_CORRECTOS.items():
         patron_error = rf"\b{incorrecto}\b"
-
+        print("entra incorrecto incorrecto")
         for match in re.finditer(patron_error, script, re.IGNORECASE):
             linea_num = script[:match.start()].count("\n") + 1
 
             agregar_hallazgo(
                 hallazgos,
-                "Lineamientos de Estructura (Script)",
+                "Lineamientos de comandos SQL",
                 "Error",
                 f"Comando SQL mal escrito '{incorrecto}'. Quizás quiso decir '{correcto}'.",
                 f"Línea {linea_num}"
@@ -161,6 +161,7 @@ def validar_calidad(script, hallazgos):
                 "Lineamientos de Calidad en Transformaciones",
                 "CRITICO",
                 "Transacción sin ROLLBACK.",
+
                 f"Línea {linea_num}"
             )
 
@@ -197,7 +198,7 @@ def validar_sqlglot(script, hallazgos):
             hallazgos,
             "Lineamientos de Estructura (Script)",
             "Error",
-            f"Error de sintaxis SQL detectado por sqlglot: {str(e)}",
+            f"Error de sintaxis SQL detectado: {str(e)}",
             "Sintaxis SQL"
         )
 
@@ -208,7 +209,9 @@ def mostrar_resultados(hallazgos):
         "Lineamientos de Estructura (Script)",
         "Lineamientos de Consistencia de Arquitectura",
         "Lineamientos de Calidad en Transformaciones",
-        "Lineamientos sobre Columnas"
+        "Lineamientos sobre Columnas",
+        "Lineamientos de comandos SQL"
+
     ]
 
     if hallazgos:
