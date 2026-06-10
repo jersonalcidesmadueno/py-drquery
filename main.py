@@ -94,7 +94,7 @@ def validar_estructura(script, hallazgos):
 
             agregar_hallazgo(
                 hallazgos,
-                "Lineamientos de comandos SQL",
+                "Lineamientos de sintaxis SQL",
                 "Error",
                 f"Comando SQL mal escrito '{incorrecto}'. Quizás quiso decir '{correcto}'.",
                 f"Línea {linea_num}"
@@ -210,7 +210,7 @@ def mostrar_resultados(hallazgos):
         "Lineamientos de Consistencia de Arquitectura",
         "Lineamientos de Calidad en Transformaciones",
         "Lineamientos sobre Columnas",
-        "Lineamientos de comandos SQL"
+        "Lineamientos de sintaxis SQL"
 
     ]
 
