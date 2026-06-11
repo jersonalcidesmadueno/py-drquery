@@ -2,7 +2,7 @@
 import streamlit as st
 import sqlglot
 from PIL import Image 
-from sqlglot import parse, errors
+from sqlglot import parse, errors,exp
 import re
 
 st.set_page_config(page_title="Validador SQL", layout="wide")
@@ -18,18 +18,21 @@ st.markdown("Carga un archivo `.sql` para validar lineamientos.")
 
 uploaded_file = st.file_uploader(
     "Adjunta un archivo SQL",
-    type=["sql"]
-)
-#tree.sqlglot.parse_one("select  a, b from tabla where x=1")
-#print  (tree.sql(pretty=True))
+    type=["sql"])
+if  uploaded_file is not None:
+    max_size=1 * 1024 * 1024 # 1 mb
+    if uploaded_file.size >max_size:
+        st.error("El archivo supera el limite de 1 MB.")
+    else:st.success("Archivo valido.")     
 # -----------------------------
 # VALIDACIONES
 # -----------------------------
-
 SQL_KEYWORDS_CORRECTOS = {
     "SELET": "SELECT",
+    "SELEC": "SELECT",
     "FORM": "FROM",
     "WHRE": "WHERE",
+    "WHER": "WHERE",
     "ODER BY": "ORDER BY",
     "GROPU BY": "GROUP BY",
     "HAVNG": "HAVING",
@@ -50,16 +53,13 @@ SQL_KEYWORDS_CORRECTOS = {
     "BEIGN": "BEGIN",
     "GETDATEE": "GETDATE",
     "SUBSTRNG": "SUBSTRING" 
-
 }
-
 
 def obtener_linea(script, texto):
     for i, line in enumerate(script.splitlines(), start=1):
         if texto.lower() in line.lower():
             return i, line.strip()
     return None, None
-
 
 def agregar_hallazgo(lista, categoria, tipo, detalle, ubicacion):
     lista.append({
@@ -68,7 +68,6 @@ def agregar_hallazgo(lista, categoria, tipo, detalle, ubicacion):
         "detalle": detalle,
         "ubicacion": ubicacion
     })
-
 
 def validar_estructura(script, hallazgos):
     # Validar INSERT INTO estructura
@@ -84,14 +83,11 @@ def validar_estructura(script, hallazgos):
     #        "No se encontró estructura válida INSERT INTO BaseDeDatos.Catálogo.Esquema.Tabla",
     #        "INSERT INTO"
     #    )
-
     # Validar comandos mal escritos
     for incorrecto, correcto in SQL_KEYWORDS_CORRECTOS.items():
         patron_error = rf"\b{incorrecto}\b"
-        print("entra incorrecto incorrecto")
         for match in re.finditer(patron_error, script, re.IGNORECASE):
             linea_num = script[:match.start()].count("\n") + 1
-
             agregar_hallazgo(
                 hallazgos,
                 "Lineamientos de sintaxis SQL",
@@ -99,7 +95,6 @@ def validar_estructura(script, hallazgos):
                 f"Comando SQL mal escrito '{incorrecto}'. Quizás quiso decir '{correcto}'.",
                 f"Línea {linea_num}"
             )
-
 
 def validar_calidad(script, hallazgos):
 
@@ -132,24 +127,35 @@ def validar_calidad(script, hallazgos):
         )
 
     # UPDATE sin WHERE
-    patron_update = r"UPDATE\s+[A-Za-z0-9_\.]+\s+SET\s+.*?;"
+    try:
+        patron_update = r"UPDATE\b.*?;"
+        for match in re.finditer(
+            patron_update,
+            script,
+            re.IGNORECASE | re.DOTALL
+        ):
+            bloque = match.group(0)
 
-    for match in re.finditer(patron_update, script, re.IGNORECASE | re.DOTALL):
+            if "WHERE" not in bloque.upper():
 
-        bloque = match.group(0)
+                linea_num = script[:match.start()].count("\n") + 1
 
-        if "WHERE" not in bloque.upper():
+                agregar_hallazgo(
+                    hallazgos,
+                    "Lineamientos de Calidad en Transformaciones",
+                    "CRITICO",
+                    "UPDATE sin WHERE.",
+                    f"Línea {linea_num}"
+                )
 
-            linea_num = script[:match.start()].count("\n") + 1
-
-            agregar_hallazgo(
-                hallazgos,
-                "Lineamientos de Calidad en Transformaciones",
-                "CRITICO",
-                "UPDATE sin WHERE.",
-                f"Línea {linea_num}"
-            )
-
+    except Exception as e:
+        agregar_hallazgo(
+            hallazgos,
+            "Error de validación",
+            "CRITICO",
+            f"Error al validar UPDATE sin WHERE: {str(e)}",
+            "N/A"
+        )
     # Transacción sin rollback
     if "BEGIN TRAN" in script.upper():
         if "ROLLBACK" not in script.upper():
@@ -164,7 +170,6 @@ def validar_calidad(script, hallazgos):
 
                 f"Línea {linea_num}"
             )
-
 
 def validar_arquitectura(script, hallazgos):
 
@@ -186,7 +191,6 @@ def validar_arquitectura(script, hallazgos):
                 f"Línea {linea_num}"
             )
 
-
 def validar_sqlglot(script, hallazgos):
 
     try:
@@ -202,7 +206,6 @@ def validar_sqlglot(script, hallazgos):
             "Sintaxis SQL"
         )
 
-
 def mostrar_resultados(hallazgos):
 
     categorias = [
@@ -211,7 +214,6 @@ def mostrar_resultados(hallazgos):
         "Lineamientos de Calidad en Transformaciones",
         "Lineamientos sobre Columnas",
         "Lineamientos de sintaxis SQL"
-
     ]
 
     if hallazgos:
@@ -236,12 +238,9 @@ def mostrar_resultados(hallazgos):
         else:
             st.markdown("#### ✅ No se encontraron errores ni alertas.")
             st.markdown("-------------------------")
-
-
 # -----------------------------
 # MAIN
 # -----------------------------
-
 if uploaded_file:
 
     contenido = uploaded_file.read().decode("utf-8")
